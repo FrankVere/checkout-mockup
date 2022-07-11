@@ -17,13 +17,11 @@ const CheckoutPage = () => {
   const [ccName, setCCName] = useState();
   const [error, setError] = useState();
 
+  const [fieldError, setFieldError] = useState();
+
   useEffect(() => {
     setCCInfo(valid.number(ccNum));
   }, [ccNum]);
-
-  console.log(ccInfo);
-  console.log(ccName);
-  console.log(cvv);
 
   let yearArr = [];
   let monthArr = [];
@@ -37,10 +35,10 @@ const CheckoutPage = () => {
   for (let i = 1; i <= 12; i++) {
     monthArr.push(i);
   }
-  console.log(valid.cardholderName(ccName));
 
   const onSubmitHandler = () => {
     setError("");
+    setFieldError("");
     const validName = valid.cardholderName(ccName);
     const validNum = valid.number(ccNum);
     const validMonth = valid.expirationMonth(ccMonth);
@@ -49,21 +47,21 @@ const CheckoutPage = () => {
     console.log(validName);
     if (validName.isValid === false) {
       setError("Cardholder name is invalid!");
+      setFieldError("nameError");
     } else if (validNum.isValid === false) {
       setError("Credit card number is invalid!");
+      setFieldError("numError");
     } else if (validYear.isValid === false) {
       setError("Expiry date is year invalid!");
+      setFieldError("yearError");
     } else if (validMonth.isValid === false) {
       setError("Expiry date is month invalid!");
+      setFieldError("monthError");
     } else if (validCVV.isValid === false) {
       setError("Cvv is invalid!");
+      setFieldError("cvvError");
     }
   };
-
-  //   console.log(valid.number(ccNum));
-  //   console.log(valid.expirationMonth(ccMonth));
-  //   console.log(valid.expirationYear(ccYear));
-  //   console.log(valid.cvv(cvv));
 
   return (
     <>
@@ -146,8 +144,21 @@ const CheckoutPage = () => {
 
                       <Baselabel>
                         <FlexRow2 gap={"2px"}>
-                          <Label1 color={"#4d5c6f"}>Name on Card</Label1>
-                          <Required>*</Required>
+                          {fieldError === "nameError" ? (
+                            <>
+                              {" "}
+                              <Label1 color={"red"}>Name on Card</Label1>{" "}
+                              <Required>*</Required>{" "}
+                            </>
+                          ) : (
+                            <>
+                              {" "}
+                              <Label1 color={"#4d5c6f"}>
+                                Name on Card
+                              </Label1>{" "}
+                              <Required>*</Required>{" "}
+                            </>
+                          )}
                         </FlexRow2>
                       </Baselabel>
                     </TextField>
@@ -160,8 +171,18 @@ const CheckoutPage = () => {
                         />
                         <Baselabel>
                           <FlexRow2 gap={"2px"}>
-                            <Label1>Card Number</Label1>
-                            <Required>*</Required>
+                            {fieldError === "numError" ? (
+                              <>
+                                <Label1 color={"red"}>Card Number</Label1>
+                                <Required>*</Required>
+                              </>
+                            ) : (
+                              <>
+                                {" "}
+                                <Label1>Card Number</Label1>
+                                <Required>*</Required>{" "}
+                              </>
+                            )}
                           </FlexRow2>
                         </Baselabel>
                       </TextField1>
@@ -233,8 +254,18 @@ const CheckoutPage = () => {
 
                         <Baselabel>
                           <FlexRow2 gap={"2px"}>
-                            <Label1 color={"#4d5c6f"}>CSC/CVV</Label1>
-                            <Required>*</Required>
+                            {fieldError === "cvvError" ? (
+                              <>
+                                <Label1 color={"red"}>CSC/CVV</Label1>{" "}
+                                <Required>*</Required>
+                              </>
+                            ) : (
+                              <>
+                                {" "}
+                                <Label1 color={"#4d5c6f"}>CSC/CVV</Label1>{" "}
+                                <Required>*</Required>{" "}
+                              </>
+                            )}
                           </FlexRow2>
                         </Baselabel>
                       </TextField2>
